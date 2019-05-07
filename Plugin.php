@@ -3,6 +3,7 @@
 namespace Kanboard\Plugin\TrelloJSON2Kanboard;
 
 use Kanboard\Core\Plugin\Base;
+use Kanboard\Core\Security\Role;
 use Kanboard\Core\Translator;
 
 class Plugin extends Base
@@ -11,6 +12,11 @@ class Plugin extends Base
     {
         $this->template->hook->attach('template:dashboard:page-header:menu', 'TrelloJSON2Kanboard:dashboard/menu');
         $this->template->hook->attach('template:header:creation-dropdown', 'TrelloJSON2Kanboard:dashboard/menu');
+        $this->template->hook->attach('template:header:dropdown', 'TrelloJSON2Kanboard:header/imported');
+
+        $this->route->addRoute('/trello/imported/projects', 'ImportedProjectListController', 'show', 'TrelloJSON2Kanboard');
+
+        $this->applicationAccessMap->add('ImportedProjectListController', '*', Role::APP_ADMIN);
     }
 
     public function onStartup()
